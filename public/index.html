@@ -23,7 +23,7 @@
 					</div>
 					</div>
 					<div class="rightSide">
-					<form id="my-form" method="POST" class="paymentForm">
+					<form id="myForm" method="POST" class="paymentForm">
 					<input name="credit-card-number" type="text">
 					<input name="card-holder" type="text">
 					<input name="ccv" type="text">
@@ -75,7 +75,7 @@
 	//get item id's
 	
 	//send AJAX post request
-	const f = document.getElementById('my-form');
+	const f = document.getElementById('myForm');
 	const formData = new FormData(f);
 		console.log(...formData);
 	let SKU_list = getItemList();
@@ -88,7 +88,7 @@
 	return false;
 	}
 
-	let form = document.getElementById('my-form');
+	let form = document.getElementById('myForm');
 	if (form.attachEvent) {
 	form.attachEvent("submit", processForm)
 	} else {
