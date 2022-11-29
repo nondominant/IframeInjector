@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+	<head>
+		<link rel="stylesheet" href="style.css">
+		<!-- Development (un-minified) -->
+		<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+
+		<!-- Production (minified) -->
+		<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+	</head>
+	<body>
+		<div class="hitBox">
+			<div id="main" class="closed">
+				<div class="titleBar">
+						<svg version="1.1" id="closeButton" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128" xml:space="preserve"><style>.st0{display:none}.st1{display:inline}.st2{fill:#0a0a0a}</style><g><g><path class="st2" d="M64 0C28.7 0 0 28.7 0 64s28.7 64 64 64 64-28.7 64-64S99.3 0 64 0zm0 121.6C32.2 121.6 6.4 95.8 6.4 64S32.2 6.4 64 6.4s57.6 25.8 57.6 57.6-25.8 57.6-57.6 57.6zM49.2 38.4 73.6 64 49.2 89.6h13.5L86.4 64 62.7 38.4H49.2z" /></g></g></svg>
+					<h3 id="titleTag">torus payment portal</h3>
+				</div>
+				<div class="body">
+					<div class="leftSide">
+					<h2>Items in your Shopping cart</h2>
+					<div id="itemList">
+						<ul id="listBody">
+						</ul>
+					</div>
+					</div>
+					<div class="rightSide">
+					<form id="my-form" method="POST" class="paymentForm">
+					<input name="credit-card-number" type="text">
+					<input name="card-holder" type="text">
+					<input name="ccv" type="text">
+					<input type="submit" value="confirm">
+					</form>
+					<button onclick="getPublicKey()">Crypto</button>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	<script>
+	
+	
+	function getPublicKey() {
+		let parentWindow = window.parent || window.opener;
+		parentWindow.postMessage("phantom", "*");
+	}
+
+//	async function sendSolana() {
+//		const provider = getProvider(); // see "Detecting the Provider"
+//		const network = "https://api.testnet.solana.com";
+//		const connection = new Connection(network);
+//		const transaction = new Transaction();
+//		const { signature } = await provider.signAndSendTransaction(transaction);
+//		await connection.getSignatureStatus(signature);
+//		console.log("sent: ", signature);
+//	}
+//
+//	window.paySolana = async function paySolana() {
+//		console.log("using solana");
+//		const provider = getProvider(); // see "Detecting the Provider"
+//		console.log("provider", window.phantom.solana);
+//	        window.phantom.solana.connect();
+//	}
+//	const getProvider = () => {
+//	if ('phantom' in window) {
+//	const provider = window.phantom?.solana;
+//	if (provider?.isPhantom) {
+//	return provider;
+//	}
+//	}
+//	window.open('https://phantom.app/', '_blank');
+//	};
+
+	async function processForm(e) {
+	if (e.preventDefault) { e.preventDefault(); }
+	//get item id's
+	
+	//send AJAX post request
+	const f = document.getElementById('my-form');
+	const formData = new FormData(f);
+		console.log(...formData);
+	let SKU_list = getItemList();
+	const output = await postData('http://localhost:8080/purchase', {
+		payment_details: [...formData],
+		items: SKU_list
+	});
+	clearItemList();
+	document.getElementById('listBody').innerHTML = '';
+	return false;
+	}
+
+	let form = document.getElementById('my-form');
+	if (form.attachEvent) {
+	form.attachEvent("submit", processForm)
+	} else {
+	form.addEventListener("submit", processForm);
+	}
+
+window.updateItemList = function updateItemList(newItem) {
+	let current = window.localStorage.getItem('item-list');
+	if (!current) { current = ''; }
+	let next = current + newItem + ':';
+	window.localStorage.setItem('item-list', next);
+}
+window.getItemList = function getItemList() {
+	return window.localStorage.getItem('item-list');
+}
+window.clearItemList = function clearItemList() {
+	window.localStorage.removeItem('item-list');
+}
+	//Fetch manual http request
+window.postData = async function postData(url = '', data = {}) {
+		const response = await fetch(url, {
+		      method: 'POST',
+		      mode: 'cors', // this cannot be 'no-cors'
+		      headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+		      },
+		      body: JSON.stringify(data),
+		    })
+		return response; 
+	}
+
+	//growing iframe onclick
+window.addEventListener('DOMContentLoaded', (loaded) => {
+	let page = document.querySelector('body');
+	page.addEventListener('click', function(event) {
+	    //send message
+	    if (event.target.id !== "closeButton") {
+	    let parentWindow = window.parent || window.opener;
+	    parentWindow.postMessage("open", "*");
+	    }
+	});
+	let closeButton = document.getElementById('closeButton');
+	closeButton.addEventListener('click', function(event) {
+	    //send message
+	    let parentWindow = window.parent || window.opener;
+	    parentWindow.postMessage("close", "*");
+	});
+});
+
+
+// sending and receiving messages from parent page
+window.addEventListener("message", (event) => {
+	let obj = {};
+	try {
+		obj = JSON.parse(event.data);
+	} catch {
+		return;
+	}
+	if (obj.eventType === "was_opened") {
+	    let target = document.querySelector('#main');
+	    target.classList.remove("closed");
+	    target.classList.add("open");
+	} else if (obj.eventType === "was_closed") {
+	    let target = document.querySelector('#main');
+	    target.classList.remove("open");
+	    target.classList.add("closed");
+
+	} else if (obj.eventType === "add_item") {
+		let text = obj.item;
+		updateItemList(text);
+		let li = document.createElement('li');
+		let u = document.createElement('ul');
+		let s = document.createElement('li');
+		u.append(s);
+		li.append(text);
+		li.append(u);
+		document.getElementById('listBody').append(li);
+		if (!obj.options) {
+			return;
+		} else {
+			let pairs = obj.options.split(',');
+			let keys = [];
+			let values = [];
+			for (const curr in pairs) {
+				temp = pairs[curr].split(':');
+				keys[curr] = temp[0];
+				values[curr] = temp[1];
+			}
+			s.append("keys: " + keys + " values: " + values);
+		}
+	} else if (obj.eventType === "provider") {
+		(async () => {
+		console.log(obj.publicKey);
+		console.dir(obj.provider);
+		let provider = obj.provider;
+		const network = "https://api.devnet.solana.com";
+		const connection = new solanaWeb3.Connection(network);
+		const transaction = new solanaWeb3.Transaction();
+		console.log(transaction);
+	})();
+		//event.source.postMessage("thank you", event.origin);
+	}
+});
+	</script>
+	</body>
+</html>

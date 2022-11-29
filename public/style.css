@@ -1,0 +1,97 @@
+* { 
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+.blank {
+}
+#main {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+}
+
+.hitBox {
+	box-sizing: border-box;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	height: 100vh;
+	width: 100vw;
+	margin: 0;
+	padding: 0;
+	/* From https://css.glass */
+	background: transparent;
+
+}
+
+.closed {
+	display: none !important;
+}
+
+.open {
+	height: 100vh;
+	width: 90vw;
+	background: transparent;
+}
+
+.titleBar {
+	display: flex;
+	flex-direction: row;
+	height: 10vh;
+	width: 100%;
+}
+.body {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: 100%;
+}
+.leftSide {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+	width: 60%;
+}
+.rightSide {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 40%;
+}
+#itemList {
+	margin-top: 2rem;
+	border-top: solid black 2px;
+}
+#closeButton {
+	height: 2rem;
+	width: 2rem;
+	margin: 1rem;
+	background: transparent;
+	transition: all ease 0.5s;
+}
+#closeButton:hover {
+	transform: rotate(180deg);
+}
+#titleTag {
+	margin-right: auto;
+	margin-left: auto;
+}
+#back_icon {
+	width: 100%;
+	height: 100%;
+}
+.paymentForm {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+
+	height: 90%;
+	background: white;
+	border-radius: 16px;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+}
+
+.drum .raccoon .tape .hood .urge .muffin .photo .setup .pipe .pluck .genuine .column {
+}

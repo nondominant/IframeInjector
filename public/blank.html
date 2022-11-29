@@ -1,0 +1,19 @@
+<html>
+	<head>
+	<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<div class="blank">
+		<h1>BLANK</h1>
+		</div>
+	<script>
+		let page = document.querySelector('body');
+		page.addEventListener('click', function(event) {
+			//send message
+			let parentWindow = window.parent || window.opener;
+			parentWindow.postMessage("open", "*");
+		});
+
+	</script>
+	</body>
+</html>
