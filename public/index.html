@@ -161,25 +161,32 @@ window.addEventListener("message", (event) => {
 		let text = obj.item;
 		updateItemList(text);
 		let li = document.createElement('li');
-		let u = document.createElement('ul');
-		let s = document.createElement('li');
-		u.append(s);
+		let remove = document.createElement('button');
+		remove.setAttribute("style", "margin-left:2rem;height:1rem;width:1rem;border-radius:0.5rem;background-color:red;");
+		remove.onclick = function() {
+			const parent = this.parentNode;
+			parent.remove();
+		}; // for IE
+		//let u = document.createElement('ul');
+		//let s = document.createElement('li');
+		//u.append(s);
 		li.append(text);
-		li.append(u);
+		li.append(remove);
+		//li.append(u);
 		document.getElementById('listBody').append(li);
-		if (!obj.options) {
-			return;
-		} else {
-			let pairs = obj.options.split(',');
-			let keys = [];
-			let values = [];
-			for (const curr in pairs) {
-				temp = pairs[curr].split(':');
-				keys[curr] = temp[0];
-				values[curr] = temp[1];
-			}
-			s.append("keys: " + keys + " values: " + values);
-		}
+	//	if (!obj.options) {
+	//		return;
+	//	} else {
+	//		let pairs = obj.options.split(',');
+	//		let keys = [];
+	//		let values = [];
+	//		for (const curr in pairs) {
+	//			temp = pairs[curr].split(':');
+	//			keys[curr] = temp[0];
+	//			values[curr] = temp[1];
+	//		}
+	//		s.append("keys: " + keys + " values: " + values);
+	//	}
 	} else if (obj.eventType === "provider") {
 		(async () => {
 		console.log(obj.publicKey);

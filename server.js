@@ -27,8 +27,11 @@ app.get('/query', (req, res) => {
 	res.send('kazaword');
 })
 app.post('/purchase', (req, res) => {
-
 	console.log(req.body);
+	// extract hash id's from req.body
+	// pull price list corresponding to the apikey from database
+	// check that correct payment has been received from one channel
+	// send NZTether to account registered to apikey
 	res.status(200);
 	res.send();
 });

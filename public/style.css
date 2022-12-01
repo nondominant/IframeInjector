@@ -95,3 +95,19 @@
 
 .drum .raccoon .tape .hood .urge .muffin .photo .setup .pipe .pluck .genuine .column {
 }
+
+#myForm {
+	background: #EA7AF4;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+input[type=text] {
+	margin: 2rem;
+	border-radius: 4px;
+}
+
+
+
+
